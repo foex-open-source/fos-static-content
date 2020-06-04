@@ -1,0 +1,1 @@
+# fos-static-content
