@@ -1,1 +1,3 @@
 # fos-static-content
+
+test
