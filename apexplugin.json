@@ -1,0 +1,40 @@
+{
+    "name":"FOS - Client-side Condition"
+   ,"version":"20.1.0"
+   ,"description":"Specify a client-side condition to control whether the execution of actions continues or stops. If the condition evaluates to True, then the rest of True or False actions are executed, if the condition evaluates to False, the execution stops."
+   ,"license":"MIT"
+   ,"homepage":"https:\/\/foex.at\/fos"
+   ,"author":{
+        "name":"FOEX GmbH"
+       ,"email":"office@fos.world"
+       ,"url":"https:\/\/fos.world\/"
+       ,"twitter":"@foexopensource"
+    }
+   ,"repository":{
+        "type":"git"
+       ,"url":"https:\/\/github.com\/foex-open-source\/.git"
+    }
+   ,"oracle":{
+        "versions":[
+            "11.2.0.4"
+           ,"12.1.0.1"
+           ,"12.2.0.1"
+           ,"18.0.0.0"
+           ,"19.0.0.0"
+        ]
+       ,"apex":{
+            "versions":[
+                "19.2.0"
+               ,"20.1.0"
+            ]
+           ,"plugin":{
+                "internalName":"COM.FOS.CLIENTSIDE_CONDITION"
+               ,"type":"dynamic action"
+               ,"demo":"https:\/\/fos.world\/ords\/f?p=1000:"
+               ,"previewImage":"https:\/\/fos.world\/ords\/fos_master_ws\/fos-image\/COM.FOS.CLIENTSIDE_CONDITION"
+            }
+        }
+    }
+}
+
+
