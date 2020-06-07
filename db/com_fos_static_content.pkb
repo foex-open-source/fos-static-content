@@ -1,3 +1,5 @@
+CREATE OR REPLACE PACKAGE BODY COM_FOS_STATIC_CONTENT
+IS
 function render
     ( p_region              apex_plugin.t_region
     , p_plugin              apex_plugin.t_plugin
@@ -51,4 +53,7 @@ begin
 
     return l_return;
 end;
+END COM_FOS_STATIC_CONTENT;
+/
+
 

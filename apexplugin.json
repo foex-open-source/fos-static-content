@@ -1,7 +1,7 @@
 {
-    "name":"FOS - Client-side Condition"
+    "name":"FOS - Static Content"
    ,"version":"20.1.0"
-   ,"description":"Specify a client-side condition to control whether the execution of actions continues or stops. If the condition evaluates to True, then the rest of True or False actions are executed, if the condition evaluates to False, the execution stops."
+   ,"description":"\u003Cp\u003EThis region type differs from the native \"Static Content\" region in that it is refreshable.\u003C\/p\u003E"
    ,"license":"MIT"
    ,"homepage":"https:\/\/foex.at\/fos"
    ,"author":{
@@ -28,10 +28,10 @@
                ,"20.1.0"
             ]
            ,"plugin":{
-                "internalName":"COM.FOS.CLIENTSIDE_CONDITION"
-               ,"type":"dynamic action"
+                "internalName":"COM.FOS.STATIC_CONTENT"
+               ,"type":"region"
                ,"demo":"https:\/\/fos.world\/ords\/f?p=1000:"
-               ,"previewImage":"https:\/\/fos.world\/ords\/fos_master_ws\/fos-image\/COM.FOS.CLIENTSIDE_CONDITION"
+               ,"previewImage":"https:\/\/fos.world\/ords\/fos_master_ws\/fos-image\/COM.FOS.STATIC_CONTENT"
             }
         }
     }
