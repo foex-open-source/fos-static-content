@@ -1,7 +1,9 @@
+
+
 {
     "name":"FOS - Static Content"
    ,"version":"20.1.0"
-   ,"description":"\u003Cp\u003EThis region type differs from the native \"Static Content\" region in that it is refreshable.\u003C\/p\u003E"
+   ,"description":"An enhanced Static Content region with support for shortcuts, client-side or AJAX refreshing, lazy refreshing, and spinners.\r\n\u003Ch4\u003EFree Plug-in under MIT License\u003C\/h4\u003E\r\n\u003Cp\u003E\r\nAll FOS plug-ins are released under MIT License, which essentially means it is free for everyone to use, no matter if commercial or private use. \r\n\u003C\/p\u003E\r\n\u003Ch4\u003EOverview\u003C\/h4\u003E\r\n\u003Cp\u003EThe \u003Cstrong\u003EFOS - Static Region\u003C\/strong\u003E plug-in has been created to honour the \"everything refreshable\" principle. The plug-in allows you to refresh the static content client-side or server-side. It also supports shortcuts, Lazy Loading, Lazy Refreshing, and showing a loading spinner and mask.\n\u003C\/p\u003E\n\u003Cp\u003E\n    Why would I want to refresh static content when it is static content after all? ...the reason is in the situations when you have used substitutions in your content. \n\u003C\/p\u003E"
    ,"keywords":[
         "static"
        ,"html"
@@ -9,7 +11,12 @@
        ,"clientside"
     ]
    ,"license":"MIT"
-   ,"homepage":"https:\/\/foex.at\/fos"
+   ,"commercial":"Yes"
+   ,"homepage":"https:\/\/foex.at\/fos\/"
+   ,"bugs":{
+        "url":"https:\/\/github.com\/foex-open-source\/fos-static-content\/issues"
+       ,"email":"support@fos.world"
+    }
    ,"author":{
         "name":"FOEX GmbH"
        ,"email":"office@fos.world"
@@ -22,8 +29,7 @@
     }
    ,"oracle":{
         "versions":[
-            "11.2.0.4"
-           ,"12.1.0.1"
+            "12.1.0.1"
            ,"12.2.0.1"
            ,"18.0.0.0"
            ,"19.0.0.0"
@@ -36,11 +42,13 @@
            ,"plugin":{
                 "internalName":"COM.FOS.STATIC_CONTENT"
                ,"type":"region"
-               ,"demo":"https:\/\/fos.world\/ords\/f?p=1000:3010"
+               ,"demo":"https:\/\/fos.world\/ords\/f?p=10000:3010"
                ,"previewImage":"https:\/\/fos.world\/ords\/fos_master_ws\/fos-image\/COM.FOS.STATIC_CONTENT"
             }
         }
     }
 }
+
+
 
 
