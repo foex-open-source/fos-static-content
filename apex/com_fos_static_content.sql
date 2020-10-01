@@ -34,19 +34,22 @@ prompt APPLICATION 102 - FOS Dev - Plugin Master
 --   Flashback:       0
 --   Export Type:     Component Export
 --   Manifest
---     PLUGIN: 49755158803875939
+--     PLUGIN: 61118001090994374
+--     PLUGIN: 134108205512926532
+--     PLUGIN: 168413046168897010
 --     PLUGIN: 13235263798301758
---     PLUGIN: 34615171094372499
 --     PLUGIN: 37441962356114799
 --     PLUGIN: 1846579882179407086
 --     PLUGIN: 8354320589762683
 --     PLUGIN: 50031193176975232
 --     PLUGIN: 34175298479606152
 --     PLUGIN: 35822631205839510
+--     PLUGIN: 2674568769566617
 --     PLUGIN: 14934236679644451
 --     PLUGIN: 2600618193722136
 --     PLUGIN: 2657630155025963
 --     PLUGIN: 284978227819945411
+--     PLUGIN: 56714461465893111
 --   Manifest End
 --   Version:         19.2.0.00.18
 --   Instance ID:     250144500186934
@@ -353,7 +356,7 @@ wwv_flow_api.create_plugin(
 '<p>',
 '    Why would I want to refresh static content when it is static content after all? ...the reason is in the situations when you have used substitutions in your content. ',
 '</p>'))
-,p_version_identifier=>'20.1.0'
+,p_version_identifier=>'20.1.1'
 ,p_about_url=>'https://fos.world'
 ,p_plugin_comment=>wwv_flow_string.join(wwv_flow_t_varchar2(
 '// Settings for the FOS browser extension',
@@ -636,6 +639,7 @@ wwv_flow_api.create_plugin_attr_value(
 '<p>Specify whether shortcuts should be expanded in the Region source/text. A shortcut name needs to be wrapped in double-quotes, e.g. "SHORTCUT_NAME"</p>',
 '<p>We support build options too, so there shouldn''t be anything stopping you from using them.</p>',
 '<h3>What are shortcuts?</h3>',
+
 '<p>Most people really don''t know, but they are very similar to substitutions but have a different syntax i.e. you specify the shortcut name in enclosed double quotes e.g. "SHORTCUT_NAME". You would use them when you want to centralize repeating Javas'
 ||'cript or HTML or other text. They provide more functionality than a regular substitution as they can be dynamically generated using PLSQL for every individual substitution, meaning you don''t need to have session state set when the substitution is bei'
 ||'ng performed. It can dynamically execute your PLSQL code to return the value at the time of substitution. They are pretty powerful!</p>'))
@@ -813,6 +817,7 @@ wwv_flow_api.g_varchar2_table(7) := '6C6F63616C526566726573683F617065782E7265676
 wwv_flow_api.g_varchar2_table(8) := '2C2866756E6374696F6E2865297B6E2E697356697369626C653D652C21657C7C6E2E6C6F616465642626216E2E6E65656473526566726573687C7C28617065782E726567696F6E286E2E726567696F6E4964292E7265667265736828292C6E2E6C6F6164';
 wwv_flow_api.g_varchar2_table(9) := '65643D21302C6E2E6E65656473526566726573683D2131297D29292C617065782E6A51756572792877696E646F77292E6F6E2822617065787265616479656E64222C2866756E6374696F6E28297B76617220653D725B305D3B73657454696D656F757428';
 wwv_flow_api.g_varchar2_table(10) := '2866756E6374696F6E28297B617065782E7769646765742E7574696C2E7669736962696C6974794368616E676528652C2130297D292C6E2E7669736962696C697479436865636B44656C61797C7C316533297D2929297D2C464F532E726567696F6E2E73';
+
 wwv_flow_api.g_varchar2_table(11) := '7461746963436F6E74656E742E726566726573683D66756E6374696F6E2865297B766172206E2C692C722C742C613D24282223222B652E726567696F6E577261707065724964292C6F3D652E726177436F6E74656E742C733D652E6573636170653B6966';
 wwv_flow_api.g_varchar2_table(12) := '28652E73686F775370696E6E6572262628693D652E7370696E6E6572506F736974696F6E2C723D652E73686F775370696E6E65724F7665726C61792C743D22626F6479223D3D692C6E3D66756E6374696F6E2865297B766172206E2C613D617065782E75';
 wwv_flow_api.g_varchar2_table(13) := '74696C2E73686F775370696E6E657228692C7B66697865643A747D293B72657475726E20722626286E3D2428273C64697620636C6173733D22666F732D726567696F6E2D6F7665726C6179272B28743F222D6669786564223A2222292B27223E3C2F6469';
