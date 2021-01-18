@@ -1,5 +1,3 @@
-
-
 /* globals apex,$ */
 
 var FOS = window.FOS || {};
@@ -22,6 +20,9 @@ FOS.region = FOS.region || {};
  * @param {string}  config.rawContent              The raw content string
  * @param {boolean} config.escape                  Whether to escape the values of referenced items
  * @param {boolean} config.localRefresh            Fetch the new content from the DB, or replace substitutions locally?
+ * @param {boolean} [config.sanitizeContent]       Whether to pass the content through DOMPurify
+ * @param {object}  [config.DOMPurifyConfig]       Additional options to be passed to DOMPurify. Sanitize Content must be enabled.
+ * @param {string}  [config.initialContent]        The initial content to be applied shown if sanitizeContent is enabled and lazyLoad is disabled
  */
 FOS.region.staticContent = function (daContext, config, initFn) {
     var context = daContext || this,
@@ -61,6 +62,12 @@ FOS.region.staticContent = function (daContext, config, initFn) {
             }
         }
     });
+
+    // apply sanitized content
+    if(config.sanitizeContent && config.initialContent){
+        var content = DOMPurify.sanitize(config.initialContent, config.DOMPurifyConfig || {});
+        $('#' + config.regionWrapperId).html(content);
+    }
 
     // if we refresh locally then we need to substitute them on page render
     if (config.localRefresh) {
@@ -144,7 +151,11 @@ FOS.region.staticContent.refresh = function (config) {
                     }
                 }
                 //replacing the old content with the new
-                $('#' + config.regionWrapperId).html(data.content);
+                var content = data.content;
+                if(config.sanitizeContent){
+                    content = DOMPurify.sanitize(content, config.DOMPurifyConfig || {});
+                }
+                $('#' + config.regionWrapperId).html(content);
                 // trigger our after refresh event(s)
                 apex.event.trigger('apexafterrefresh', '#' + config.regionId, config);
             },
@@ -153,6 +164,4 @@ FOS.region.staticContent.refresh = function (config) {
         });
     }
 };
-
-
 

@@ -1,5 +1,3 @@
-
-
 create or replace package body com_fos_static_content
 as
 
@@ -59,9 +57,10 @@ begin
                                   when 'HTML_TEXT'           then cSC.shortcut
                                   when 'HTML_TEXT_ESCAPE_SC' then apex_escape.html(cSC.shortcut)
                                   when 'IMAGE'               then sys.htf.img(cSC.shortcut)
-                                  when 'TEXT_ESCAPE_JS'      then replace(cSC.shortcut,'''','\''')
+                                  -- single quote becomes escaped single quote
+                                  when 'TEXT_ESCAPE_JS'      then replace(cSC.shortcut, chr(39), chr(92) || chr(39))
                                   when 'MESSAGE'             then apex_lang.message(cSC.shortcut)
-                                  when 'MESSAGE_ESCAPE_JS'   then replace(apex_lang.message(cSC.shortcut),'''','\''')
+                                  when 'MESSAGE_ESCAPE_JS'   then replace(apex_lang.message(cSC.shortcut), chr(39), chr(92) || chr(39))
                                   when 'FUNCTION_BODY'       then apex_plugin_util.get_plsql_function_result(cSC.shortcut)
                               end
                 ;
@@ -96,8 +95,12 @@ as
     l_raw_content          p_region.attribute_01%type := p_region.attribute_01;
     l_escape_item_values   boolean                    := p_region.attribute_06 = 'Y';
     l_local_refresh        boolean                    := p_region.attribute_07 = 'Y';
-    l_expand_shortcuts     boolean                    := instr(p_region.attribute_15, 'expand-shortcuts') > 0;
-    l_exec_plsql           boolean                    := instr(p_region.attribute_15, 'execute-plsql-before-refresh') > 0;
+
+    c_options              apex_t_varchar2            := apex_string.split(p_region.attribute_15, ':');
+    l_expand_shortcuts     boolean                    := 'expand-shortcuts'             member of c_options;
+    l_exec_plsql           boolean                    := 'execute-plsql-before-refresh' member of c_options;
+    l_sanitize_content     boolean                    := 'sanitize-content'             member of c_options;
+
     l_skip_substitutions   boolean                    := nvl(p_region.attribute_08, 'N') = 'Y';
     l_lazy_load            boolean                    := nvl(p_region.attribute_11, 'N') = 'Y';
     l_lazy_refresh         boolean                    := nvl(p_region.attribute_12, 'N') = 'Y';
@@ -119,6 +122,7 @@ as
             else null
         end;
 
+    l_content               varchar2(32767);
 begin
     -- standard debugging intro, but only if necessary
     if apex_application.g_debug
@@ -126,6 +130,15 @@ begin
         apex_plugin_util.debug_region
           ( p_plugin => p_plugin
           , p_region => p_region
+          );
+    end if;
+
+    -- conditionally load the DOMPurify library
+    if l_sanitize_content then
+        apex_javascript.add_library
+          ( p_name       => 'purify#MIN#'
+          , p_directory  => p_plugin.file_prefix || 'js/dompurify/2.2.6/'
+          , p_key        => 'fos-purify'
           );
     end if;
 
@@ -144,14 +157,19 @@ begin
     then
         if l_skip_substitutions
         then
-            sys.htp.p( case when l_escape_content then apex_escape.html(l_raw_content) else l_raw_content end );
+            l_content := l_raw_content;
         else
             -- output the static region content and make sure all substitution variables are replaced
-            sys.htp.p( apex_plugin_util.replace_substitutions
-                         ( p_value  => l_raw_content
-                         , p_escape => l_escape_item_values
-                         )
-                      );
+            l_content := apex_plugin_util.replace_substitutions
+                 ( p_value  => l_raw_content
+                 , p_escape => l_escape_item_values
+                 );
+        end if;
+
+        l_content := case when l_escape_content then apex_escape.html(l_content) else l_content end;
+
+        if not l_sanitize_content then
+            sys.htp.p(l_content);
         end if;
     end if;
 
@@ -174,6 +192,11 @@ begin
     apex_json.write('localRefresh'       , l_local_refresh        );
     apex_json.write('lazyLoad'           , l_lazy_load            );
     apex_json.write('lazyRefresh'        , l_lazy_refresh         );
+    apex_json.write('sanitizeContent'    , l_sanitize_content     );
+    if not l_local_refresh and not l_lazy_load and l_sanitize_content then
+        apex_json.write_raw('DOMPurifyConfig', '{}');
+        apex_json.write('initialContent' , l_content              );
+    end if;
     apex_json.close_object;
 
     -- initialization code for the region widget. needed to handle the refresh event
@@ -198,10 +221,15 @@ as
     -- plug-in attributes
     l_raw_content          p_region.attribute_01%type := p_region.attribute_01;
     l_escape_item_values   boolean                    := p_region.attribute_06 = 'Y';
-    l_expand_shortcuts     boolean                    := instr(p_region.attribute_15, 'expand-shortcuts') > 0;
-    l_exec_plsql           boolean                    := instr(p_region.attribute_15, 'execute-plsql-before-refresh') > 0;
-    l_exec_plsql_code      p_region.attribute_01%type := p_region.attribute_09;
-    l_skip_substitutions   boolean                    := instr(p_region.attribute_15, 'skip-substitutions') > 0;
+
+    c_options              apex_t_varchar2            := apex_string.split(p_region.attribute_15, ':');
+    l_expand_shortcuts     boolean                    := 'expand-shortcuts'             member of c_options;
+    l_exec_plsql           boolean                    := 'execute-plsql-before-refresh' member of c_options;
+    l_sanitize_content     boolean                    := 'sanitize-content'             member of c_options;
+
+    l_skip_substitutions   boolean                    := nvl(p_region.attribute_08, 'N') = 'Y';
+    l_exec_plsql_code      p_region.attribute_09%type := p_region.attribute_09;
+
     l_items_to_return      p_region.attribute_13%type := p_region.attribute_13;
     l_escape_content       boolean                    := p_region.attribute_14 = 'Y';
     l_item_names           apex_t_varchar2;
@@ -236,14 +264,15 @@ begin
     l_content :=
          case
              when l_skip_substitutions then
-                 case when l_escape_content then apex_escape.html(l_raw_content) else l_raw_content end
+                 l_raw_content
              else
                  apex_plugin_util.replace_substitutions
                    ( p_value  => l_raw_content
                    , p_escape => l_escape_item_values
                    )
-         end
-    ;
+         end;
+
+    l_content := case when l_escape_content then apex_escape.html(l_content) else l_content end;
 
     apex_json.open_object;
     apex_json.write('status' , 'success');
@@ -279,7 +308,5 @@ end ajax;
 
 end;
 /
-
-
 
 
