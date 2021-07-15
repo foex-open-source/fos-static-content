@@ -4,7 +4,7 @@ var FOS = window.FOS || {};
 FOS.region = FOS.region || {};
 
 /**
- * Initialization function for the dynamic content region.
+ * Initialization function for the static content region.
  * This function must be run for the region to subscribe to the refresh event
  * Expects as parameter an object with the following attributes:
  *
