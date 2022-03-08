@@ -92,7 +92,8 @@ as
     l_region_id            varchar2(4000)             := p_region.static_id;
     l_wrapper_id           varchar2(4000)             := l_region_id || '_FOS_WRAPPER';
     l_ajax_identifier      varchar2(4000)             := apex_plugin.get_ajax_identifier;
-    l_raw_content          p_region.attribute_01%type := p_region.attribute_01;
+    l_source               p_region.source%type       := p_region.source;
+    l_text                 p_region.attribute_01%type := p_region.attribute_01;
     l_escape_item_values   boolean                    := p_region.attribute_06 = 'Y';
     l_local_refresh        boolean                    := p_region.attribute_07 = 'Y';
 
@@ -122,10 +123,14 @@ as
             else null
         end;
 
+    -- preparing for moving the region-source into the native attribute
+    -- the plug-in attribute will be removed in 22.0
+    -- for now, both is available
+    l_raw_content           varchar2(32767)           := case when l_source is null then l_text else l_source end;
     l_content               varchar2(32767);
 begin
     -- standard debugging intro, but only if necessary
-    if apex_application.g_debug
+    if apex_application.g_debug and substr(:DEBUG,6) >= 6
     then
         apex_plugin_util.debug_region
           ( p_plugin => p_plugin
@@ -219,7 +224,8 @@ function ajax
 return apex_plugin.t_region_ajax_result
 as
     -- plug-in attributes
-    l_raw_content          p_region.attribute_01%type := p_region.attribute_01;
+    l_source               p_region.source%type       := p_region.source;
+    l_text                 p_region.attribute_01%type := p_region.attribute_01;
     l_escape_item_values   boolean                    := p_region.attribute_06 = 'Y';
 
     c_options              apex_t_varchar2            := apex_string.split(p_region.attribute_15, ':');
@@ -234,13 +240,14 @@ as
     l_escape_content       boolean                    := p_region.attribute_14 = 'Y';
     l_item_names           apex_t_varchar2;
 
+    l_raw_content          varchar2(32767)            := case when l_source is null then l_text else l_source end;
     -- resulting content
     l_content              clob                       := '';
 
     l_return               apex_plugin.t_region_ajax_result;
 begin
     -- standard debugging intro, but only if necessary
-    if apex_application.g_debug
+    if apex_application.g_debug and substr(:DEBUG,6) >= 6
     then
         apex_plugin_util.debug_region
           ( p_plugin => p_plugin
