@@ -403,7 +403,7 @@ wwv_flow_api.create_plugin(
 '<p>',
 '    Why would I want to refresh static content when it is static content after all? ...the reason is in the situations when you have used substitutions in your content. ',
 '</p>'))
-,p_version_identifier=>'21.2.0'
+,p_version_identifier=>'22.1.0'
 ,p_about_url=>'https://fos.world'
 ,p_plugin_comment=>wwv_flow_string.join(wwv_flow_t_varchar2(
 '// Settings for the FOS browser extension',
